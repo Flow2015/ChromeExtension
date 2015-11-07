@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	// listener when the start button is selected
 	start.addEventListener('click', function() {
-		if (isInputVisible == false) {
+		/*if (isInputVisible == false) {
 
 			// shows input
 			input.style.visibility = 'visible';
@@ -31,6 +31,32 @@ document.addEventListener('DOMContentLoaded', function() {
                 dump(req.responseText);
             }
 
-		}
+		}*/
+		chrome.tabs.getSelected(null, function(tab) {
+			d = document;
+			if (isInputVisible == false) {
+
+				// shows input
+				input.style.visibility = 'visible';
+				input.focus();
+				input.placeholder = "Enter topic here...";
+
+				// sets the input to be visible
+				isInputVisible = true;
+			}
+			else {
+			    var url = 'http://semantic-link.com/#/' + input.value;
+				var f = d.createElement('form');
+				f.action = url;
+				f.method = 'post';
+				var i = d.createElement('input');
+				i.type = 'hidden';
+				i.name = 'url';
+				i.value = tab.url;
+				f.appendChild(i);
+				d.body.appendChild(f);
+				f.submit();
+			}
+		});
 	}, false);
 }, false);
