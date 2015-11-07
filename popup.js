@@ -22,7 +22,14 @@ document.addEventListener('DOMContentLoaded', function() {
 			// sets the input to be visible
 			isInputVisible = true;
 		}
-		else { // once the input it visible, take its values when pressed again and do...
+		else {
+		    var url = 'http://semantic-link.com/#/' + input.value;
+            var req = new XMLHttpRequest();
+            req.open('GET', url, false);
+            req.send(null);
+            if(req.status = 200) {
+                dump(req.responseText);
+            }
 
 		}
 	}, false);
