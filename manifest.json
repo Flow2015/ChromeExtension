@@ -1,0 +1,15 @@
+{
+	"manifest_version": 2,
+
+	"name": "Flow",
+	"description": "This extension will analyze your productivity",
+	"version": "1.0",
+
+	"browser_action": {
+		"default_icon": "flow01.png",
+		"default_popup": "popup.html"
+	},
+	"permissions": [
+	"activeTab"
+	]
+}
