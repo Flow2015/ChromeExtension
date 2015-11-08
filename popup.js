@@ -47,23 +47,23 @@ document.addEventListener('DOMContentLoaded', function() {
 		// was onload
 
 		xhr.onload = function() {
-		var text = xhr.responseText;
-		// var title = getTitle(text);
-		// alert('Response from CORS request to ' + url + ': ' + title);
-		// console.log('success' + text);
+			var text = xhr.responseText;
+			// var title = getTitle(text);
+			// alert('Response from CORS request to ' + url + ': ' + title);
+			// console.log('success' + text);
 
-		keywords  = JSON.parse(text);
-		if (keywords.length >= 5) {
-			console.log(keywords.length);
-			console.log(keywords[1].v);
-			console.log(keywords[2].v);
-		}
-		else {
-			keywords = new Array(1);
-			keywords[0] = input.value;
-			console.log(keywords[0]);
-			console.log(keywords.length);
-		}
+			keywords  = JSON.parse(text);
+			if (keywords.length >= 5) {
+				console.log(keywords.length);
+				console.log(keywords[0].v);
+				console.log(keywords[1].v);
+			}
+			else {
+				keywords = new Array(1);
+				keywords[0] = input.value;
+				console.log(keywords[0]);
+				console.log(keywords.length);
+			}
 		};
 
 		xhr.onerror = function() {
@@ -80,9 +80,24 @@ document.addEventListener('DOMContentLoaded', function() {
 			return;
 		}
 		xhr.onload = function() {
-		var text = xhr.responseText;
-		console.log("TEST " + text);
-		//SOMETHING SOMETHING SOMETHING
+			var text = xhr.responseText;
+			var wordFound = false;
+			//check input.value first, then iterate through keywords
+			//if any keywords are found in the text, break the loop
+			if (text.indexOf(input.value) == -1) {
+				var i;
+				for (i = 0; i < keywords.length; i++) {
+					//word found, break loop, else keep going
+					if (text.indexOf(keywords[i]) != -1) {
+						wordFound = true;
+						break;
+					}
+				}
+			}
+			else {
+				wordFound = true;
+			}
+			console.log(wordFound);
 		};
 
 		xhr.onerror = function() {
@@ -106,8 +121,11 @@ document.addEventListener('DOMContentLoaded', function() {
 			}
 			else {
 				var url_2 = tabs[0].url;
+				//Removes http:// or https://
 				var tmp = url_2.replace("http://", "");
+				tmp = url_2.replace("https://", "");
 				var tmp2 = "http://www.textise.net/showText.aspx?strURL=http%253A//" + tmp;
+				console.log(tmp2);
 				makeCorsRequest();
 				makeCorsRequest2(tmp2);
 			}
