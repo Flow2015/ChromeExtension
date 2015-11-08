@@ -1,10 +1,11 @@
 document.addEventListener('DOMContentLoaded', function() {
-
 	// make variable for the input field and the start button
 	var input = document.getElementById('input');
 	var start = document.getElementById('start');
 	var isInputVisible = false;
 	var keywords; //the array of keywords
+	var count = 0;
+	// var isAlreadyClicked = false;
 
 	// initially hide the input field
 	input.style.visibility = 'hidden';
@@ -54,15 +55,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
 			keywords  = JSON.parse(text);
 			if (keywords.length >= 5) {
-				console.log(keywords.length);
-				console.log(keywords[0].v);
-				console.log(keywords[1].v);
+				// console.log(keywords.length);
+				// console.log(keywords[0].v);
+				// console.log(keywords[1].v);
 			}
 			else {
 				keywords = new Array(1);
 				keywords[0] = input.value;
-				console.log(keywords[0]);
-				console.log(keywords.length);
+				// console.log(keywords[0]);
+				// console.log(keywords.length);
 			}
 		};
 
@@ -80,24 +81,26 @@ document.addEventListener('DOMContentLoaded', function() {
 			return;
 		}
 		xhr.onload = function() {
+			count = 0;
 			var text = xhr.responseText;
-			var wordFound = false;
+			text = text.toLowerCase();
 			//check input.value first, then iterate through keywords
 			//if any keywords are found in the text, break the loop
-			if (text.indexOf(input.value) == -1) {
+			//console.log(text);
+			if (text.indexOf(input.value) != -1) {
+				count++;
+			}
+			if (keywords.length > 0) {
 				var i;
 				for (i = 0; i < keywords.length; i++) {
 					//word found, break loop, else keep going
-					if (text.indexOf(keywords[i]) != -1) {
-						wordFound = true;
-						break;
+					if (text.indexOf(" " + keywords[i].v) != -1) {
+						console.log(keywords[i].v);
+						count++;
 					}
 				}
 			}
-			else {
-				wordFound = true;
-			}
-			console.log(wordFound);
+			console.log(count);
 		};
 
 		xhr.onerror = function() {
@@ -107,28 +110,33 @@ document.addEventListener('DOMContentLoaded', function() {
 		xhr.send();
 	} 
 
+
+
 	// listener when the start button is selected
 	start.addEventListener('click', function() {
-		chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
-			if (isInputVisible == false) {
-				// shows input
-				input.style.visibility = 'visible';
-				input.focus();
-				input.placeholder = "Enter topic here...";
+		// if (isAlreadyClicked == false) {
+			chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+				if (isInputVisible == false) {
+					// shows input
+					input.style.visibility = 'visible';
+					input.focus();
+					input.placeholder = "Enter topic here...";
 
-				// sets the input to be visible
-				isInputVisible = true;
-			}
-			else {
-				var url_2 = tabs[0].url;
-				//Removes http:// or https://
-				var tmp = url_2.replace("http://", "");
-				tmp = url_2.replace("https://", "");
-				var tmp2 = "http://www.textise.net/showText.aspx?strURL=http%253A//" + tmp;
-				console.log(tmp2);
-				makeCorsRequest();
-				makeCorsRequest2(tmp2);
-			}
-		});
+					// sets the input to be visible
+					isInputVisible = true;
+				}
+				else {
+					var url_2 = tabs[0].url;
+					//Removes http:// or https://
+					var tmp = url_2.replace("http://", "");
+					tmp = url_2.replace("https://", "");
+					var tmp2 = "http://cors.io/?u=http://www.textise.net/showText.aspx?strURL=http%253A//" + tmp;
+					console.log(tmp2);
+					makeCorsRequest();
+					makeCorsRequest2(tmp2);
+					// isAlreadyClicked = true;
+				}
+			});
+		// }
 	}, false);
 }, false);
