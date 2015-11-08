@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	// Make the actual CORS request.
 function makeCorsRequest() {
   // All HTML5 Rocks properties support CORS.
-  //var url = 'http://cors.io/?u=http://semantic-link.com/';
+  // var url = 'http://cors.io/?u=http://en.wikipedia.org/wiki/Volcano';
   var url = 'http://cors.io/?u=http://semantic-link.com/related.php?word=' + input.value;
 
   var xhr = createCORSRequest('GET', url);
@@ -43,11 +43,24 @@ function makeCorsRequest() {
   }
 
   // Response handlers.
+  // was onload
+
   xhr.onload = function() {
     var text = xhr.responseText;
-   // var title = getTitle(text);
+    // var title = getTitle(text);
     // alert('Response from CORS request to ' + url + ': ' + title);
-    console.log('success' + text);
+    // console.log('success' + text);
+
+    var obj = JSON.parse(text);
+    if (obj.length != 0) {
+    	console.log(obj.length);
+    	console.log(obj[1].v);
+    	console.log(obj[2].v);
+    }
+    else {
+    	obj = input.value;
+    	console.log(obj);
+    }
   };
 
   xhr.onerror = function() {
@@ -74,7 +87,7 @@ function makeCorsRequest() {
 		    // console.log(input.value);
 		    // $.ajax({
 		    // 	type: "GET",
-		    // 	url: url,l
+		    // 	url: url,
 		    // 	async: false,
 		    // 	cache: false,
 		    // }).done(function(response){

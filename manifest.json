@@ -10,6 +10,11 @@
 		"default_popup": "popup.html"
 	},
 	"permissions": [
-	"activeTab"
-	]
+	"activeTab",
+	"<all_urls>",
+	"http://*/*", 
+	"chrome-extension://hknbnkhgpioekehgngpnfomnbncglfmn/"
+	], 
+
+	"content_security_policy":"script-src 'self' "
 }
